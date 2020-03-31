@@ -1,23 +1,25 @@
+//test object
 var test = [
     {
         name: "tuck",
-        pace: 14,
-        paceDuration: 10,
-        restDuration: 138,
-        cycle: 1,
-        totalDistance: 0,
-        totalPoints: 0
-    }, {
-        name: "sullivan",
         pace: 15,
         paceDuration: 11,
         restDuration: 152,
         cycle: 1,
         totalDistance: 0,
         totalPoints: 0
+    }, {
+        name: "sullivan",
+        pace: 14,
+        paceDuration: 10,
+        restDuration: 138,
+        cycle: 1,
+        totalDistance: 0,
+        totalPoints: 0
     }
 ];
 
+//object containing information for each puppy
 var puppies = [
     {
         name: "alfie",
@@ -94,6 +96,7 @@ var puppies = [
     }
 ];
 
+//global variables
 var raceLength = 3461;
 var part1WinnerName = "";
 var part1WinnerTotalDistance = 0;
@@ -101,56 +104,71 @@ var benchmarkDistance = 0;
 var part2WinnerName = "";
 var part2WinnerTotalPoints = 0;
 
-function part1 (num) {
+//function to calculate total distance and total points for each race
+function race (num) {
+
+//looping through the number of seconds of the race
 for (var i = 1; i <= num; i ++) {
+    //for each second, looping through each puppy
     for (var j = 0; j < puppies.length; j ++) {
+        //calculating whether each puppy is running or resting by using the number of times through each cycle
         if (i <= ((puppies[j].paceDuration * puppies[j].cycle) + (puppies[j].restDuration * (puppies[j].cycle - 1)))) {
+            //if the puppy is running, add their ft/sec to their total distance
             puppies[j].totalDistance += puppies[j].pace;
+            //determining what the leading distance is for each second
             if (puppies[j].totalDistance > benchmarkDistance) {
                 benchmarkDistance = puppies[j].totalDistance;
-            }
+            };
+        //in the last second of resting, the number of times through the cycle increases
         } else if (i === ((puppies[j].paceDuration + puppies[j].restDuration) * puppies[j].cycle)) {
             puppies[j].cycle ++;
-        }
-    }
-    for (var k = 0; k < puppies.length; k ++) {
-        if (puppies[k].totalDistance === benchmarkDistance) {
-            puppies[k].totalPoints ++;
-        }
-    }
+        };
+        //if any puppy has the leading distance, they receive a point
+        if (puppies[j].totalDistance === benchmarkDistance) {
+            puppies[j].totalPoints ++;
+        };
+    };
+};
 
-}
+part1Winner();
+part2Winner();
 };
 
 function part1Winner() {
-    part1(raceLength);
+   
+    console.log(`THE PUPPIES' TOTAL DISTANCES ARE LISTED BELOW:\n`);
+
+    //loop through each puppy to determine which puppy has the highest total distance
     for (var i = 0; i < puppies.length; i ++) {
         console.log(`${puppies[i].name}: ${puppies[i].totalDistance}\n`);
+
         if (puppies[i].totalDistance > part1WinnerTotalDistance) {
             part1WinnerTotalDistance = puppies[i].totalDistance;
             part1WinnerName = puppies[i].name;
-        }
-    }
+        };
+    };
     
-    console.log(`The winning pup is ${part1WinnerName} with a total distance of ${part1WinnerTotalDistance}!`);
-    
-}
+    console.log(`The winning pup is ${part1WinnerName} with a total distance of ${part1WinnerTotalDistance}!\n`);
+};
 
-part1Winner();
+
 
 
 function part2Winner() {
-    part1(raceLength);
+
+    console.log(`THE PUPPIES' POINT TOTALS ARE LISTED BELOW:\n`);
+
+    //loop through each puppy to determine which puppy has the highest number of total points
     for (var i = 0; i < puppies.length; i ++) {
         console.log(`${puppies[i].name}: ${puppies[i].totalPoints}\n`);
+
         if (puppies[i].totalPoints > part2WinnerTotalPoints) {
             part2WinnerTotalPoints = puppies[i].totalPoints;
             part2WinnerName = puppies[i].name;
-        }
-    }
+        };
+    };
     
     console.log(`The winning pup is ${part2WinnerName} with a point total of ${part2WinnerTotalPoints}!`);
-    
-}
+};
 
-part2Winner();
+race(raceLength);
